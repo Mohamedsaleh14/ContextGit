@@ -1,0 +1,13 @@
+tag_prefixes:
+  architecture: AR-
+  business: BR-
+  code: C-
+  decision: ADR-
+  system: SR-
+  test: T-
+directories:
+  architecture: docs/03_architecture
+  business: docs/01_business
+  code: src
+  system: docs/02_system
+  test: tests

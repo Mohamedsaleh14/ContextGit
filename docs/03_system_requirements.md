@@ -1,3 +1,14 @@
+---
+contextgit:
+  id: auto
+  type: system
+  title: Functional and non-functional requirements for contextgit MVP
+  status: active
+  upstream:
+    - BR-001
+  tags: [mvp, requirements, specifications]
+---
+
 # System Requirements
 
 ## Overview

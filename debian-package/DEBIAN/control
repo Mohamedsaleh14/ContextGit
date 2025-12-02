@@ -1,0 +1,17 @@
+Package: contextgit
+Version: 1.0.0
+Section: devel
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.11), python3-typer (>= 0.9.0), python3-rich (>= 13.0.0), python3-yaml
+Maintainer: ContextGit Developers <developers@contextgit.dev>
+Description: Requirements traceability for LLM-assisted development
+ contextgit is a local-first, git-friendly CLI tool for managing requirements
+ and context traceability in LLM-assisted software projects.
+ .
+ Features:
+  - Tracks traceability from business needs to code to tests
+  - Embeds metadata in Markdown files
+  - Detects staleness via checksums
+  - Provides JSON output for LLM integration
+  - Designed for Claude Code and similar LLM CLIs

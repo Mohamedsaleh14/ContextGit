@@ -1,3 +1,14 @@
+---
+contextgit:
+  id: auto
+  type: architecture
+  title: High-level architecture and design for contextgit
+  status: active
+  upstream:
+    - SR-001
+  tags: [mvp, architecture, design]
+---
+
 # Architecture Overview
 
 ## Introduction

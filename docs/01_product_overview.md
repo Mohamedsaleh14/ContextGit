@@ -1,3 +1,12 @@
+---
+contextgit:
+  id: auto
+  type: business
+  title: contextgit product vision and requirements
+  status: active
+  tags: [mvp, planning, product]
+---
+
 # Product Overview
 
 ## Problem Statement
