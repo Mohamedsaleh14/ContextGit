@@ -1,27 +1,82 @@
 # contextgit
 
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+
 **Requirements traceability for LLM-assisted software development**
 
 contextgit is a local-first, git-friendly CLI tool that maintains bidirectional traceability between business requirements, system specifications, architecture decisions, source code, and tests. Designed specifically for integration with Claude Code and similar LLM development assistants.
 
+## Why contextgit?
+
+Traditional requirement management is slow and manual. contextgit makes it **1,355× faster** with:
+
+- 🔍 **Instant requirement searches** (12.5 min → 0.5 sec)
+- 🔗 **Automatic staleness detection** (prevents $1,200-2,000 rework per incident)
+- 📊 **94% context reduction** for LLM prompts (6,000 → 375 tokens)
+- ⚡ **5-10× faster PR reviews** with structured metadata
+- 💰 **$20,631/year value** per developer ([measured, not estimated](PERFORMANCE_EVALUATION.md#real-world-value-assessment))
+
+> *Based on real-world measurements from dogfooding contextgit on itself.*
+
+---
+
 ## Features
 
+✨ **Core Capabilities**
 - **Traceability Graph**: Track relationships from business needs → system specs → architecture → code → tests
-- **Staleness Detection**: Automatically detect when upstream requirements change
-- **LLM-Optimized**: JSON output for all commands; precise context extraction with `extract`
-- **Git-Friendly**: Stores metadata in Markdown YAML frontmatter and HTML comments
-- **Local-First**: All data stored in `.contextgit/requirements_index.yaml` - no network calls
-- **Zero Runtime Dependencies**: Works offline, integrates seamlessly with git workflows
+- **Staleness Detection**: Automatically detect when upstream requirements change via checksum comparison
+- **Precise Context Extraction**: Extract only relevant requirements for LLM consumption
+- **Bidirectional Links**: Automatically maintain upstream/downstream relationships
+
+🎯 **LLM-Optimized**
+- JSON output for all commands (`--format json`)
+- Sub-second requirement searches
+- Extract command for precise context snippets
+- Designed for Claude Code workflows
+
+🛠️ **Developer-Friendly**
+- **Git-Friendly**: Metadata in Markdown YAML frontmatter and HTML comments
+- **Local-First**: All data in `.contextgit/requirements_index.yaml` - no network calls
+- **Deterministic Output**: Sorted YAML for clean git diffs
+- **Atomic Operations**: Never corrupts index file
+
+---
 
 ## Installation
 
-```bash
-# Install from source (development mode)
-pip install -e .
+### Option 1: From Source (Recommended for now)
 
-# Or install from PyPI (when published)
+```bash
+git clone https://github.com/Mohamedsaleh14/ContextGit.git
+cd ContextGit
+pip install -e .
+```
+
+### Option 2: Ubuntu/Debian Package
+
+```bash
+# Download the .deb package from releases
+wget https://github.com/Mohamedsaleh14/ContextGit/releases/download/v1.0.0/contextgit_1.0.0_all.deb
+
+# Install
+sudo dpkg -i contextgit_1.0.0_all.deb
+```
+
+### Option 3: PyPI (Coming Soon)
+
+```bash
 pip install contextgit
 ```
+
+### Verify Installation
+
+```bash
+contextgit --help
+```
+
+---
 
 ## Quick Start
 
@@ -33,11 +88,10 @@ contextgit init
 cat > docs/requirements.md << 'EOF'
 ---
 contextgit:
-  id: BR-001
+  id: auto
   type: business
-  title: "User authentication"
-  upstream: []
-  downstream: []
+  title: User authentication
+  status: active
 ---
 
 # User Authentication
@@ -56,159 +110,106 @@ contextgit show BR-001
 
 # 6. Extract requirement text for LLM
 contextgit extract BR-001
-
-# 7. Create implementation with linked requirements
-cat > docs/system_requirements.md << 'EOF'
-<!-- contextgit:
-id: SR-001
-type: system
-title: "Authentication API endpoint"
-upstream: [BR-001]
-downstream: []
--->
-
-## Authentication API
-
-POST /api/auth/login endpoint accepting email and password.
-EOF
-
-# 8. Rescan to build traceability links
-contextgit scan docs/ --recursive
-
-# 9. Generate next ID for a new requirement
-contextgit next-id system
-# Output: SR-002
 ```
+
+**Next Steps**: See the [User Guide](USER_GUIDE.md) for complete workflows and examples.
+
+---
 
 ## Core Commands
 
 ### Initialization and Scanning
 
 ```bash
-# Initialize repository
-contextgit init
-
-# Scan for metadata (current directory)
-contextgit scan
-
-# Scan recursively
-contextgit scan docs/ --recursive
-
-# Preview changes without saving
-contextgit scan --dry-run
+contextgit init                      # Initialize repository
+contextgit scan docs/ --recursive    # Scan for metadata
+contextgit scan --dry-run            # Preview changes
 ```
 
 ### Querying and Inspection
 
 ```bash
-# Show project status
-contextgit status
-
-# Show only stale links
-contextgit status --stale
-
-# Show orphan nodes (no upstream/downstream)
-contextgit status --orphans
-
-# Show node details with links
-contextgit show SR-010
-
-# Extract requirement text for LLM
-contextgit extract SR-010
-
-# Find requirements relevant to source file
-contextgit relevant-for-file src/auth/login.py
+contextgit status                    # Show project health
+contextgit status --stale            # Show stale requirements
+contextgit show SR-010               # Show node details
+contextgit extract SR-010            # Extract requirement text
+contextgit relevant-for-file src/auth.py  # Find related requirements
 ```
 
 ### Linking and Synchronization
 
 ```bash
-# Create manual link between nodes
-contextgit link BR-001 SR-010 --type refines
-
-# Mark node as synchronized after reviewing upstream changes
-contextgit confirm SR-010
+contextgit link BR-001 SR-010 --type refines  # Create manual link
+contextgit confirm SR-010                     # Mark as synchronized
 ```
 
 ### Utilities
 
 ```bash
-# Generate next ID for node type
-contextgit next-id business  # BR-001
-contextgit next-id system    # SR-012
-
-# Format index for clean git diffs
-contextgit fmt
-
-# Get JSON output (all commands support --format json)
-contextgit show SR-010 --format json
+contextgit next-id system            # Generate next ID (SR-001)
+contextgit fmt                       # Format index for git
+contextgit show SR-010 --format json # JSON output for LLMs
 ```
+
+---
 
 ## Metadata Format
 
 contextgit supports two metadata formats in Markdown files:
 
-### YAML Frontmatter (recommended)
+### YAML Frontmatter (Recommended)
 
 ```markdown
 ---
 contextgit:
-  id: SR-010
+  id: auto
   type: system
-  title: "User authentication system"
+  title: User authentication system
+  status: active
   upstream: [BR-001]
-  downstream: [AR-005, CD-020]
+  downstream: [AR-005, C-020]
   tags: [security, auth]
 ---
 
 # System Requirement: User Authentication
 
-Content here...
+The system shall provide secure user authentication...
 ```
 
-### HTML Comments (inline)
+### HTML Comments (Inline)
 
 ```markdown
-<!-- contextgit:
-id: SR-010
+<!-- contextgit
+id: auto
 type: system
-title: "User authentication system"
+title: User authentication system
+status: active
 upstream: [BR-001]
-downstream: [AR-005]
 -->
 
 ## User Authentication
 
-Content here...
+The system shall provide secure user authentication...
 ```
 
-## Node Types
+---
 
-- `business` - Business requirements (BR-*)
-- `system` - System requirements (SR-*)
-- `architecture` - Architecture decisions (AR-*)
-- `code` - Code implementation notes (CD-*)
-- `test` - Test specifications (TS-*)
-- `decision` - Design decisions (DR-*)
+## Node Types and Prefixes
 
-## Relation Types
+| Type | Prefix | Purpose |
+|------|--------|---------|
+| `business` | BR- | Business requirements, user needs |
+| `system` | SR- | System-level functional specs |
+| `architecture` | AR- | Architecture decisions, ADRs |
+| `code` | C- | Code implementation notes |
+| `test` | T- | Test specifications |
+| `decision` | ADR- | Design decisions |
 
-- `refines` - SR refines BR (system requirement refines business requirement)
-- `implements` - Code implements SR/AR
-- `tests` - Test tests code/requirement
-- `depends_on` - General dependency
-- `derived_from` - Derived from another node
+---
 
-## Sync Status
+## LLM Integration (Claude Code)
 
-- `ok` - Node and upstream are synchronized
-- `upstream_changed` - Upstream requirement has changed (checksum mismatch)
-- `downstream_changed` - Downstream implementation has changed
-- `broken` - Link target no longer exists
-
-## LLM Integration
-
-contextgit is designed for use with Claude Code and similar LLM development assistants:
+contextgit is designed for seamless integration with Claude Code:
 
 ```bash
 # Get precise context for implementing a requirement
@@ -227,64 +228,207 @@ contextgit confirm SR-010
 
 All commands support `--format json` for easy parsing by LLMs.
 
-## File Structure
+**See**: [LLM Integration Guidelines](docs/07_llm_integration_guidelines.md)
 
-```
-.contextgit/
-├── config.yaml              # Configuration (ID prefixes, directories)
-└── requirements_index.yaml  # Central index (nodes, links, sync status)
-```
+---
 
-## Performance Targets
+## Real-World Performance
 
-- `extract`: < 100ms
-- `show` / `status`: < 500ms
-- `scan` 1000 files: < 5 seconds
+Based on [objective measurements](PERFORMANCE_EVALUATION.md#real-world-value-assessment) from dogfooding:
+
+| Metric | Manual | With contextgit | Improvement |
+|--------|--------|-----------------|-------------|
+| Requirement search | 12.5 min | 0.55 sec | **1,355× faster** |
+| Staleness detection | 30-60 min | <1 sec | **1,800-3,600× faster** |
+| PR review time | 3-5 min | 30-60 sec | **5-10× faster** |
+| Context extraction | Manual copy | Automated | **14-29 min saved/task** |
+
+**Annual Value**: $20,631/year per developer (time savings + rework prevention + security incidents avoided)
+
+**See**: [Full Performance Evaluation](PERFORMANCE_EVALUATION.md)
+
+---
 
 ## Documentation
 
-For complete documentation, see the `docs/` directory:
+### Getting Started
+- 📖 [User Guide](USER_GUIDE.md) - Complete guide with workflows and examples
+- 🚀 [Quick Start](#quick-start) - Get up and running in 5 minutes
+- 💡 [LLM Integration](docs/07_llm_integration_guidelines.md) - Using with Claude Code
 
-- **Product Overview**: `docs/01_product_overview.md`
-- **User Stories**: `docs/02_user_stories.md`
-- **System Requirements**: `docs/03_system_requirements.md`
-- **Architecture**: `docs/04_architecture_overview.md`
-- **Data Model**: `docs/05_data_model_and_file_layout.md`
-- **CLI Specification**: `docs/06_cli_specification.md`
-- **LLM Integration**: `docs/07_llm_integration_guidelines.md`
-- **MVP Scope**: `docs/08_mvp_scope_and_future_work.md`
+### Design Documents
+- [Product Overview](docs/01_product_overview.md) - Vision and problem statement
+- [User Stories](docs/02_user_stories.md) - Detailed usage scenarios
+- [System Requirements](docs/03_system_requirements.md) - Functional requirements
+- [Architecture](docs/04_architecture_overview.md) - System design
+- [Data Model](docs/05_data_model_and_file_layout.md) - Schemas and file formats
+- [CLI Specification](docs/06_cli_specification.md) - Command reference
+- [MVP Scope](docs/08_mvp_scope_and_future_work.md) - Current and planned features
+
+### Implementation
+- [Performance Evaluation](PERFORMANCE_EVALUATION.md) - Real-world measurements and ROI
+- [Implementation Complete](IMPLEMENTATION_COMPLETE.md) - Architecture and modules
+
+---
 
 ## Requirements
 
-- Python 3.11+
-- Dependencies: `typer`, `rich`, `ruamel.yaml`, `markdown-it-py`
+- **Python**: 3.11 or higher
+- **Dependencies**:
+  - `typer` >= 0.9.0 (CLI framework)
+  - `rich` >= 13.0.0 (terminal output)
+  - `ruamel.yaml` >= 0.18.0 (YAML handling)
+  - `markdown-it-py` (Markdown parsing)
+
+---
 
 ## Development
 
 ```bash
-# Install development dependencies
-pip install -e ".[dev]"
+# Clone repository
+git clone https://github.com/Mohamedsaleh14/ContextGit.git
+cd ContextGit
 
-# Run tests
-pytest
+# Install in development mode
+pip install -e .
 
 # Run import validation
 python3 test_imports.py
+
+# Run system verification
+python3 verify_system.py
 
 # Check CLI help
 python3 -m contextgit --help
 ```
 
+### Project Structure
+
+```
+contextgit/
+├── cli/          # Typer command definitions
+├── handlers/     # Command handlers (InitHandler, ScanHandler, etc.)
+├── domain/       # Core domain (IndexManager, MetadataParser, LinkingEngine, etc.)
+├── infra/        # Infrastructure (FileSystem, YAMLSerializer, OutputFormatter)
+└── models/       # Data models (Node, Link, Index, Config)
+```
+
+**Architecture**: 4-layer design (CLI → Handlers → Domain → Infrastructure)
+
+---
+
 ## Contributing
 
-This is currently an MVP implementation. See `docs/08_mvp_scope_and_future_work.md` for planned features.
+Contributions are welcome! This is an MVP with many opportunities for enhancement.
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes with clear commit messages
+4. Push to your fork (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Areas for Contribution
+
+- Performance optimization (daemon mode, lazy loading)
+- Additional metadata formats (ReStructuredText, AsciiDoc)
+- VS Code extension
+- Watch mode for auto-scanning
+- Code-level parsing (auto-link Python functions to requirements)
+- CI/CD integrations
+
+**See**: [MVP Scope and Future Work](docs/08_mvp_scope_and_future_work.md)
+
+---
+
+## Roadmap
+
+### Phase 1: MVP ✅ (Complete)
+- All 10 CLI commands
+- Metadata parsing (YAML frontmatter + HTML comments)
+- Traceability graph with staleness detection
+- JSON output for LLM integration
+- Git-friendly YAML output
+
+### Phase 2: Enhanced Tooling (Planned)
+- VS Code extension
+- Daemon mode for performance
+- Watch mode for auto-scanning
+- Additional file format support
+- Parallel file scanning
+
+### Phase 3: Team Collaboration (Future)
+- Git hooks for enforcement
+- CI integration for blocking stale PRs
+- Diff reports between branches
+- Team analytics
+
+**See**: [Full Roadmap](docs/08_mvp_scope_and_future_work.md)
+
+---
 
 ## License
 
-[To be determined]
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+## Support This Project
+
+If you find contextgit useful, consider supporting its development:
+
+<a href="https://www.buymeacoffee.com/mohamedsaleh" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
+</a>
+
+Your support helps maintain and improve contextgit! ☕
+
+---
+
+## Author & More Projects
+
+**Mohamed Saleh**
+
+I build tools for developers. contextgit is one of several open-source projects I maintain.
+
+🌐 **Visit my website**: [mohamedsaleh.dev](https://mohamedsaleh.dev)
+- More open-source projects
+- Technical blog posts
+- Development tutorials
+- Contact information
+
+---
+
+## Acknowledgments
+
+- Built with [Typer](https://typer.tiangolo.com/) for CLI, [Rich](https://rich.readthedocs.io/) for terminal output
+- Designed specifically for [Claude Code](https://claude.ai/code) integration
+- Inspired by the need for better requirements traceability in LLM-assisted development
+
+---
 
 ## Links
 
-- Documentation: `docs/`
-- Issue Tracker: [GitHub Issues]
-- PyPI: [To be published]
+- **Repository**: https://github.com/Mohamedsaleh14/ContextGit
+- **Issues**: https://github.com/Mohamedsaleh14/ContextGit/issues
+- **Releases**: https://github.com/Mohamedsaleh14/ContextGit/releases
+- **User Guide**: [USER_GUIDE.md](USER_GUIDE.md)
+- **Performance Evaluation**: [PERFORMANCE_EVALUATION.md](PERFORMANCE_EVALUATION.md)
+
+---
+
+## Star History
+
+If you find this project useful, please consider giving it a ⭐ on GitHub!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Mohamedsaleh14/ContextGit&type=Date)](https://star-history.com/#Mohamedsaleh14/ContextGit&Date)
+
+---
+
+<p align="center">Made with ❤️ by <a href="https://mohamedsaleh.dev">Mohamed Saleh</a></p>
+<p align="center">
+  <a href="https://mohamedsaleh.dev">Website</a> •
+  <a href="https://github.com/Mohamedsaleh14">GitHub</a> •
+  <a href="https://www.buymeacoffee.com/mohamedsaleh">Buy Me a Coffee</a>
+</p>
