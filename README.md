@@ -444,9 +444,9 @@ If you find this project useful, please consider giving it a ⭐ on GitHub!
 
 ---
 
-<p align="center">Made with ❤️ by <a href="https://BySaleh.com)">Mohamed Saleh</a></p>
+<p align="center">Made with ❤️ by <a href="https://BySaleh.com">Mohamed Saleh</a></p>
 <p align="center">
-  <a href="https://BySaleh.com)">Website</a> •
+  <a href="https://BySaleh.com">Website</a> •
   <a href="https://github.com/Mohamedsaleh14">GitHub</a> •
   <a href="https://buymeacoffee.com/saleh_tawfik">Buy Me a Coffee</a>
 </p>
