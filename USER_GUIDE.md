@@ -198,6 +198,16 @@ contextgit init
 This creates:
 - `.contextgit/config.yaml` - Configuration file
 - `.contextgit/requirements_index.yaml` - Empty index
+- `.contextgit/LLM_INSTRUCTIONS.md` - LLM integration guide
+
+**For automatic LLM integration (Cursor/Claude):**
+```bash
+contextgit init --setup-llm
+```
+
+This also creates:
+- `.cursorrules` - Cursor IDE integration
+- `CLAUDE.md` - Claude Code integration
 
 ### Step 2: Create Your First Requirement
 
@@ -272,16 +282,34 @@ Use this ID when creating your system requirements.
 Initialize a contextgit project in the current directory.
 
 ```bash
-contextgit init [--force]
+contextgit init [--force] [--setup-llm] [--format FORMAT]
 ```
 
 **Options:**
-- `--force`: Reinitialize existing project
+- `--force, -f`: Reinitialize existing project (overwrites existing config)
+- `--setup-llm`: Also create `.cursorrules` and `CLAUDE.md` for LLM integration
+- `--format`: Output format (text or json)
 
-**Example:**
+**Files Created:**
+- `.contextgit/config.yaml` - Configuration
+- `.contextgit/requirements_index.yaml` - Empty index
+- `.contextgit/LLM_INSTRUCTIONS.md` - Comprehensive LLM integration guide
+
+With `--setup-llm`:
+- `.cursorrules` - Cursor IDE auto-detection rules
+- `CLAUDE.md` - Claude Code integration guide
+
+**Examples:**
 ```bash
+# Basic initialization
 cd my-project/
 contextgit init
+
+# With LLM integration files (recommended)
+contextgit init --setup-llm
+
+# Reinitialize with LLM integration
+contextgit init --force --setup-llm
 ```
 
 ---
