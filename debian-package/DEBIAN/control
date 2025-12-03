@@ -1,5 +1,5 @@
 Package: contextgit
-Version: 1.0.1
+Version: 1.0.2
 Section: devel
 Priority: optional
 Architecture: all
@@ -14,4 +14,5 @@ Description: Requirements traceability for LLM-assisted development
   - Embeds metadata in Markdown files
   - Detects staleness via checksums
   - Provides JSON output for LLM integration
-  - Designed for Claude Code and similar LLM CLIs
+  - Automatic LLM integration setup (--setup-llm flag)
+  - Designed for Cursor, Claude Code and similar LLM tools
