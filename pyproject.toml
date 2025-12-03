@@ -1,6 +1,6 @@
 [project]
 name = "contextgit"
-version = "1.0.3"
+version = "1.1.0"
 description = "Requirements traceability for LLM-assisted software development. Track relationships from business needs through system specs, architecture, code, and tests."
 authors = [{name = "Saleh", email = "saleh@cronlytic.com"}]
 maintainers = [{name = "Saleh", email = "saleh@cronlytic.com"}]

@@ -49,3 +49,4 @@ This is a contextgit project if `.contextgit/config.yaml` exists.
 - **Index file**: `.contextgit/requirements_index.yaml`
 - **Config file**: `.contextgit/config.yaml`
 
+

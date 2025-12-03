@@ -43,7 +43,7 @@ Check for `.contextgit/config.yaml` to confirm this is a contextgit-managed proj
 
 **contextgit** is a local-first, git-friendly CLI tool for managing requirements and context traceability in LLM-assisted software projects.
 
-**Current Status**: v1.0.1 - Production ready, all 10 CLI commands implemented.
+**Current Status**: v1.1.0 - Production ready, all 10 CLI commands implemented.
 
 ## What contextgit Is
 

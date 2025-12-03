@@ -6,16 +6,15 @@ from rich.console import Console
 app = typer.Typer(
     name="contextgit",
     help="Requirements traceability for LLM-assisted development",
-    no_args_is_help=True,
 )
 
 console = Console()
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
-    version: bool = typer.Option(None, "--version", "-v", help="Show version"),
+    version: bool = typer.Option(False, "--version", "-v", is_flag=True, help="Show version"),
 ):
     """contextgit - Requirements traceability CLI.
 
@@ -28,6 +27,11 @@ def main(
     if version:
         from contextgit import __version__
         console.print(f"contextgit version {__version__}")
+        raise typer.Exit()
+
+    # If no subcommand is invoked and no version flag, let Typer show help
+    if ctx.invoked_subcommand is None and not version:
+        console.print(ctx.get_help())
         raise typer.Exit()
 
 

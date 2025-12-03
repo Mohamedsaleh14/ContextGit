@@ -68,10 +68,10 @@ pip install -e .
 
 ```bash
 # Download the .deb package from releases
-wget https://github.com/Mohamedsaleh14/ContextGit/releases/download/v1.0.2/contextgit_1.0.2_all.deb
+wget https://github.com/Mohamedsaleh14/ContextGit/releases/download/v1.1.0/contextgit_1.1.0_all.deb
 
 # Install
-sudo dpkg -i contextgit_1.0.2_all.deb
+sudo dpkg -i contextgit_1.1.0_all.deb
 ```
 
 ### Verify Installation
