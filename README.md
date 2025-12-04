@@ -3,12 +3,13 @@
 [![PyPI version](https://img.shields.io/pypi/v/contextgit.svg)](https://pypi.org/project/contextgit/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![Website](https://img.shields.io/badge/website-contextgit.com-blue)](https://contextgit.com)
 
 **Requirements traceability for LLM-assisted software development**
 
 🌐 **Official Website**: [contextgit.com](https://contextgit.com)
+
+**Sponsored by**: [www.cronlytic.com](https://www.cronlytic.com)
 
 contextgit is a local-first, git-friendly CLI tool that maintains bidirectional traceability between business requirements, system specifications, architecture decisions, source code, and tests. Designed specifically for integration with Claude Code and similar LLM development assistants.
 
@@ -408,6 +409,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support This Project
 
+**Sponsored by**: [www.cronlytic.com](https://www.cronlytic.com)
+
 If you find contextgit useful, consider supporting its development:
 
 <a href="https://buymeacoffee.com/saleh_tawfik" target="_blank">
@@ -461,6 +464,7 @@ If you find this project useful, please consider giving it a ⭐ on GitHub!
 ---
 
 <p align="center">Made with ❤️ by <a href="https://BySaleh.com">Mohamed Saleh</a></p>
+<p align="center">Sponsored by <a href="https://www.cronlytic.com">www.cronlytic.com</a></p>
 <p align="center">
   <a href="https://BySaleh.com">Website</a> •
   <a href="https://github.com/Mohamedsaleh14">GitHub</a> •
